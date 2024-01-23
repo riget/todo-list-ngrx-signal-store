@@ -2,8 +2,10 @@
 <div class="input-form">
     <form [formGroup]="form">
         <input formControlName="todoText" type="text" width="200"> <button (click)="onAddTodo()">Add</button>
+        &nbsp;
+        <span *ngIf="store.loading()">Loading...</span>
     </form>
-    <span *ngIf="store.loading()">Loading...</span>
+
 </div>
 
 @for (todo of store.todos(); track todo.id) {
