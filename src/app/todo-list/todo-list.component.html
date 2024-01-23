@@ -1,0 +1,19 @@
+<h1>Todo-List:</h1>
+<div class="input-form">
+    <form [formGroup]="form">
+        <input formControlName="todoText" type="text" width="200"> <button (click)="onAddTodo()">Add</button>
+    </form>
+    <span *ngIf="store.loading()">Loading...</span>
+</div>
+
+@for (todo of store.todos(); track todo.id) {
+    <div>
+        @if (todo.completed) {
+            <span>&#9745;</span>
+        } @else {
+            <span>&#9744;</span>
+        }
+        {{todo.todo}}
+    </div>
+}
+
