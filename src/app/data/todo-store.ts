@@ -1,6 +1,6 @@
-import {patchState, signalStore, withHooks, withMethods, withState} from "@ngrx/signals";
+import {patchState, signalStore, withComputed, withHooks, withMethods, withState} from "@ngrx/signals";
 import {Todo} from "./todo";
-import {inject} from "@angular/core";
+import {computed, inject} from "@angular/core";
 import {TodoService} from "./todo.service";
 import {lastValueFrom} from "rxjs";
 
@@ -11,7 +11,13 @@ export const TodoStore = signalStore(
         loading: false
     }),
 
-    withMethods((store, todoService = inject(TodoService)) => {
+    withComputed(({todos} ) => ({
+            countTodos: computed(() => todos().length)
+        }),
+    ),
+
+    withMethods((store) => {
+            const todoService = inject(TodoService)
             const setLoading = () => {
                 patchState(store, {loading: true});
             };
