@@ -3,12 +3,13 @@ import {Todo} from "./todo";
 import {computed, inject} from "@angular/core";
 import {TodoService} from "./todo.service";
 import {lastValueFrom} from "rxjs";
+import {withLogger} from "./logger.feature";
+import {withLoading} from "./loading.feature";
 
 export const TodoStore = signalStore(
     {providedIn: 'root'},
     withState({
-        todos: [] as Todo[],
-        loading: false
+        todos: [] as Todo[]
     }),
 
     withComputed(({todos} ) => ({
@@ -16,21 +17,17 @@ export const TodoStore = signalStore(
         }),
     ),
 
+    withLoading(),
+
     withMethods((store) => {
             const todoService = inject(TodoService)
-            const setLoading = () => {
-                patchState(store, {loading: true});
-            };
-            const setCompleted = () => {
-                patchState(store, {loading: false});
-            }
 
             return {
                 loadAllTodos() {
-                    setLoading();
+                    store.setLoading();
                     lastValueFrom(todoService.getItems()).then(todoResult => {
                         patchState(store, {todos: todoResult.todos});
-                        setCompleted();
+                        store.setCompleted();
                     })
                 },
 
@@ -46,6 +43,8 @@ export const TodoStore = signalStore(
             }
         }
     ),
+
+    withLogger('todos'),
 
     withHooks({
         onInit({loadAllTodos}) {
