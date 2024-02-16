@@ -1,8 +1,8 @@
-import {Todo} from "./todo";
+import {TodoItem} from "./todo-item";
 
 export interface TodoResult {
     limit: number;
     skip: number;
-    todos: Todo[];
+    todos: TodoItem[];
     total: number;
 }

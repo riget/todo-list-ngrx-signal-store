@@ -8,14 +8,14 @@
 
 </div>
 
-@for (todo of store.todos(); track todo.id) {
+@for (todoItem of store.todos(); track todoItem.id) {
     <div>
-        @if (todo.completed) {
+        @if (todoItem.completed) {
             <span>&#9745;</span>
         } @else {
             <span>&#9744;</span>
         }
-        {{todo.todo}}
+        {{todoItem.todo}}
     </div>
 }
 <hr>

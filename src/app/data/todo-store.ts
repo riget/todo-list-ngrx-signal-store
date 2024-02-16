@@ -1,5 +1,5 @@
 import {patchState, signalStore, withComputed, withHooks, withMethods, withState} from "@ngrx/signals";
-import {Todo} from "./todo";
+import {TodoItem} from "./todo-item";
 import {computed, inject} from "@angular/core";
 import {TodoService} from "./todo.service";
 import {lastValueFrom} from "rxjs";
@@ -9,7 +9,7 @@ import {withLoading} from "./loading.feature";
 export const TodoStore = signalStore(
     {providedIn: 'root'},
     withState({
-        todos: [] as Todo[]
+        todos: [] as TodoItem[]
     }),
 
     withComputed(({todos} ) => ({
@@ -33,7 +33,7 @@ export const TodoStore = signalStore(
 
                 addTodo(todoText: string) {
                     patchState(store, {loading: true});
-                    lastValueFrom(todoService.addItem(todoText)).then((newTodo: Todo) => {
+                    lastValueFrom(todoService.addItem(todoText)).then((newTodo: TodoItem) => {
                         patchState(store, {
                             todos: [...store.todos(), newTodo]
                         });

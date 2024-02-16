@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Todo} from "./todo";
+import {TodoItem} from "./todo-item";
 import {TodoResult} from "./todo-result";
 
 const apiUrl = `https://dummyjson.com/todos`;
@@ -20,13 +20,13 @@ export class TodoService {
         return this.http.get<TodoResult>(this.url + `/user/${this.userId}?limit=0`);
     }
 
-    public addItem(todoText: string): Observable<Todo> {
-        const todo: Todo = {
+    public addItem(todoText: string): Observable<TodoItem> {
+        const todo: TodoItem = {
             todo: todoText,
             userId: this.userId,
             completed: false
         }
 
-        return this.http.post<Todo>(this.url + '/add', todo);
+        return this.http.post<TodoItem>(this.url + '/add', todo);
     }
 }
