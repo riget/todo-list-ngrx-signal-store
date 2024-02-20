@@ -1,7 +1,7 @@
 import {EntityId} from "@ngrx/signals/entities";
 
 export interface TodoItem {
-    id: EntityId;
+    id: string;
     todo: string;
     completed: boolean;
     userId?: number;

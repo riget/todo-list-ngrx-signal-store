@@ -5,7 +5,8 @@ import {TodoService} from "./todo.service";
 import {lastValueFrom} from "rxjs";
 import {withLogger} from "./logger.feature";
 import {withLoading} from "./loading.feature";
-import {addEntities, addEntity, setEntities, withEntities} from "@ngrx/signals/entities";
+import {addEntities, addEntity, setEntities, updateEntity, withEntities} from "@ngrx/signals/entities";
+
 
 export const TodoStore = signalStore(
     {providedIn: 'root'},
@@ -24,7 +25,7 @@ export const TodoStore = signalStore(
             return {
                 loadAllTodos() {
                     store.setLoading();
-                    lastValueFrom(todoService.getItems()).then(todoResult => {
+                    todoService.getItems().subscribe(todoResult => {
                         patchState(store, setEntities(todoResult.todos));
                         store.setCompleted();
                     })
@@ -32,11 +33,15 @@ export const TodoStore = signalStore(
 
                 addTodo(todoText: string) {
                     store.setLoading()
-                    lastValueFrom(todoService.addItem(todoText)).then((newTodo: TodoItem) => {
-                        console.log('newtodo: ', newTodo);
+                    todoService.addItem(todoText).subscribe((newTodo: TodoItem) => {
                         patchState(store, addEntity(newTodo));
                         store.setCompleted();
                     });
+                },
+
+                updateTodo(id: string, todoText: string) {
+
+                    patchState(store, updateEntity({id, changes: {todo: todoText}}));
                 }
             }
         }
