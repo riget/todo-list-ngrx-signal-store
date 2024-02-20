@@ -25,8 +25,8 @@ export class TodoListComponent {
         todoText: ['', Validators.required]
     });
 
-    public onAddTodo() {
-        this.store.addTodo(this.form.value.todoText ?? '');
+    public async onAddTodo() {
+        await this.store.addTodo(this.form.value.todoText ?? '');
         this.form.reset();
     }
 }

@@ -23,22 +23,20 @@ export const TodoStore = signalStore(
             const todoService = inject(TodoService)
 
             return {
-                loadAllTodos() {
+                async loadAllTodos() {
                     store.setLoading();
-                    lastValueFrom(todoService.getItems()).then(todoResult => {
-                        patchState(store, {todos: todoResult.todos});
-                        store.setCompleted();
-                    })
+                    const todoResult = await todoService.getItems();
+                    patchState(store, {todos: todoResult.todos});
+                    store.setCompleted();
                 },
 
-                addTodo(todoText: string) {
-                    patchState(store, {loading: true});
-                    lastValueFrom(todoService.addItem(todoText)).then((newTodo: TodoItem) => {
-                        patchState(store, {
+                async addTodo(todoText: string) {
+                    store.setLoading();
+                    const newTodo = await todoService.addItem(todoText);
+                    patchState(store, {
                             todos: [...store.todos(), newTodo]
-                        });
-                        patchState(store, {loading: false});
                     });
+                    store.setCompleted();
                 }
             }
         }
