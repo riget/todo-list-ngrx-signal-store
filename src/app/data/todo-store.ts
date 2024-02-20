@@ -1,19 +1,18 @@
-import {patchState, signalStore, withComputed, withHooks, withMethods, withState} from "@ngrx/signals";
+import {patchState, signalStore, type, withComputed, withHooks, withMethods, withState} from "@ngrx/signals";
 import {TodoItem} from "./todo-item";
 import {computed, inject} from "@angular/core";
 import {TodoService} from "./todo.service";
 import {lastValueFrom} from "rxjs";
 import {withLogger} from "./logger.feature";
 import {withLoading} from "./loading.feature";
+import {addEntities, addEntity, setEntities, withEntities} from "@ngrx/signals/entities";
 
 export const TodoStore = signalStore(
     {providedIn: 'root'},
-    withState({
-        todos: [] as TodoItem[]
-    }),
+    withEntities<TodoItem>(),
 
-    withComputed(({todos} ) => ({
-            countTodos: computed(() => todos().length)
+    withComputed(({entities} ) => ({
+            countTodos: computed(() => entities().length)
         }),
     ),
 
@@ -26,18 +25,17 @@ export const TodoStore = signalStore(
                 loadAllTodos() {
                     store.setLoading();
                     lastValueFrom(todoService.getItems()).then(todoResult => {
-                        patchState(store, {todos: todoResult.todos});
+                        patchState(store, setEntities(todoResult.todos));
                         store.setCompleted();
                     })
                 },
 
                 addTodo(todoText: string) {
-                    patchState(store, {loading: true});
+                    store.setLoading()
                     lastValueFrom(todoService.addItem(todoText)).then((newTodo: TodoItem) => {
-                        patchState(store, {
-                            todos: [...store.todos(), newTodo]
-                        });
-                        patchState(store, {loading: false});
+                        console.log('newtodo: ', newTodo);
+                        patchState(store, addEntity(newTodo));
+                        store.setCompleted();
                     });
                 }
             }

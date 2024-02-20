@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {TodoStore} from "../data/todo-store";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
+import {patchState} from "@ngrx/signals";
 
 @Component({
     selector: 'app-todo-list',

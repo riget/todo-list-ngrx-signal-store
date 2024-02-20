@@ -8,7 +8,7 @@
 
 </div>
 
-@for (todoItem of store.todos(); track todoItem.id) {
+@for (todoItem of store.entities(); track todoItem.id) {
     <div>
         @if (todoItem.completed) {
             <span>&#9745;</span>

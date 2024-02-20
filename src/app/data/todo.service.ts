@@ -22,6 +22,7 @@ export class TodoService {
 
     public addItem(todoText: string): Observable<TodoItem> {
         const todo: TodoItem = {
+            id: '',
             todo: todoText,
             userId: this.userId,
             completed: false
